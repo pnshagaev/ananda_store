@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import environ
+
 env = environ.Env()
 # TODO: поправить пути к файлам
 env.read_env(env.str('ENV_PATH', '.env/local.env'))
@@ -23,16 +24,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG')
+DEBUG = env.bool('DEBUG', False)
 
-ALLOWED_HOSTS = ['.ananda-store.ru', '0.0.0.0']
+ALLOWED_HOSTS = ['.ananda-store.ru', '0.0.0.0', 'localhost']
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -73,17 +71,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ananda_store.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': env.db('ANANDA_STORE_DB'),
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -122,3 +112,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
